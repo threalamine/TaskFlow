@@ -1,17 +1,10 @@
 const List = require('../models/List');
 const Task = require('../models/Task');
-const { findOwnedProject } = require('../utils/projectAccess');
+const {
+    findOwnedProject,
+    findListInProject,
+} = require('../utils/projectAccess');
 const createError = require('../utils/createError');
-
-const findListInProject = async (listId, projectId) => {
-    const list = await List.findOne({ _id: listId, project: projectId });
-
-    if (!list) {
-        throw createError('List not found', 404);
-    }
-
-    return list;
-};
 
 const createList = async (req, res) => {
     const project = await findOwnedProject(req.params.projectId, req.user._id);

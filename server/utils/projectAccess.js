@@ -1,15 +1,25 @@
 const Project = require('../models/Project');
+const List = require('../models/List');
+const createError = require('./createError');
 
 const findOwnedProject = async (projectId, userId) => {
     const project = await Project.findOne({ _id: projectId, owner: userId });
 
     if (!project) {
-        const error = new Error('Project not found');
-        error.statusCode = 404;
-        throw error;
+        throw createError('Project not found', 404);
     }
 
     return project;
 };
 
-module.exports = { findOwnedProject };
+const findListInProject = async (listId, projectId) => {
+    const list = await List.findOne({ _id: listId, project: projectId });
+
+    if (!list) {
+        throw createError('List not found', 404);
+    }
+
+    return list;
+};
+
+module.exports = { findOwnedProject, findListInProject };
