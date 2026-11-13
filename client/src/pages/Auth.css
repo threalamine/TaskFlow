@@ -33,61 +33,6 @@
     font-size: 0.9rem;
 }
 
-.field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 18px;
-}
-
-.field label {
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-
-.field input {
-    font: inherit;
-    font-size: 0.95rem;
-    color: var(--text);
-    background: var(--bg);
-    border: 1px solid transparent;
-    border-radius: 10px;
-    padding: 12px 14px;
-    transition: border-color var(--ease), box-shadow var(--ease);
-}
-
-.field input::placeholder {
-    color: var(--text-muted);
-    opacity: 0.7;
-}
-
-.field input:focus,
-.field input:focus-visible {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
-}
-
-.field input:-webkit-autofill {
-    -webkit-text-fill-color: var(--text);
-    caret-color: var(--text);
-    box-shadow: 0 0 0 1000px var(--bg) inset;
-}
-
-.field input:-webkit-autofill:focus {
-    box-shadow: 0 0 0 1000px var(--bg) inset,
-        0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
-}
-
-.form-error {
-    margin-bottom: 18px;
-    padding: 10px 14px;
-    border-radius: 10px;
-    background: color-mix(in srgb, var(--priority-high) 14%, transparent);
-    font-size: 0.88rem;
-}
-
 .auth-card .primary-btn {
     width: 100%;
     margin-top: 6px;
@@ -101,13 +46,6 @@
 .auth-card .primary-btn:hover:not(:disabled) {
     transform: none;
     background: color-mix(in srgb, var(--dusk) 78%, var(--ink));
-}
-
-.primary-btn:disabled,
-.primary-btn:disabled:hover {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
 }
 
 .auth-switch {

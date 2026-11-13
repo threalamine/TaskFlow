@@ -1,0 +1,70 @@
+.modal {
+    width: min(440px, calc(100vw - 32px));
+    padding: 0;
+    border: 0;
+    border-radius: 20px;
+    background: var(--card);
+    color: var(--text);
+}
+
+.modal[open] {
+    animation: modal-in 180ms ease;
+}
+
+.modal::backdrop {
+    background: rgba(13, 27, 42, 0.7);
+    backdrop-filter: blur(3px);
+}
+
+.modal-body {
+    padding: 28px;
+}
+
+.modal h2 {
+    margin: 0 0 20px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.modal-text {
+    margin: 0 0 20px;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.danger-btn {
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 8px 16px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--priority-high);
+    color: var(--ink);
+    cursor: pointer;
+}
+
+.danger-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@keyframes modal-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
