@@ -4,6 +4,19 @@ const {
     findListInProject,
 } = require('../utils/projectAccess');
 const createError = require('../utils/createError');
+const {
+    getPagination,
+    escapeRegex,
+    parseDate,
+} = require('../utils/queryHelpers');
+
+const SORT_OPTIONS = {
+    position: { position: 1 },
+    dueDate: { dueDate: 1 },
+    '-dueDate': { dueDate: -1 },
+    createdAt: { createdAt: 1 },
+    '-createdAt': { createdAt: -1 },
+};
 
 const findTaskInProject = async (taskId, projectId) => {
     const task = await Task.findOne({ _id: taskId, project: projectId });
@@ -90,10 +103,70 @@ const createTask = async (req, res) => {
 
 const getTasks = async (req, res) => {
     const project = await findOwnedProject(req.params.projectId, req.user._id);
+    const { search, list, priority, completed, dueBefore, dueAfter, sort } =
+        req.query;
 
-    const tasks = await Task.find({ project: project._id }).sort({ position: 1 });
+    const filter = { project: project._id };
 
-    res.json({ success: true, count: tasks.length, data: tasks });
+    if (typeof search === 'string' && search.trim()) {
+        const pattern = new RegExp(escapeRegex(search.trim()), 'i');
+        filter.$or = [{ title: pattern }, { description: pattern }];
+    }
+
+    if (list !== undefined) {
+        if (typeof list !== 'string') {
+            throw createError('List must be a list id', 400);
+        }
+        filter.list = list;
+    }
+
+    if (priority !== undefined) {
+        if (!['low', 'medium', 'high'].includes(priority)) {
+            throw createError('Priority must be low, medium or high', 400);
+        }
+        filter.priority = priority;
+    }
+
+    if (completed !== undefined) {
+        if (completed !== 'true' && completed !== 'false') {
+            throw createError('Completed must be true or false', 400);
+        }
+        filter.completed = completed === 'true';
+    }
+
+    const dueFilter = {};
+    if (dueAfter !== undefined) dueFilter.$gte = parseDate(dueAfter, 'dueAfter');
+    if (dueBefore !== undefined) {
+        dueFilter.$lte = parseDate(dueBefore, 'dueBefore');
+    }
+    if (Object.keys(dueFilter).length > 0) filter.dueDate = dueFilter;
+
+    let sortBy = SORT_OPTIONS.position;
+    if (sort !== undefined) {
+        if (typeof sort !== 'string' || !Object.hasOwn(SORT_OPTIONS, sort)) {
+            throw createError('Invalid sort value', 400);
+        }
+        sortBy = SORT_OPTIONS[sort];
+    }
+
+    const { page, limit, skip } = getPagination(req.query);
+
+    const [tasks, total] = await Promise.all([
+        Task.find(filter)
+            .sort({ ...sortBy, _id: 1 })
+            .skip(skip)
+            .limit(limit),
+        Task.countDocuments(filter),
+    ]);
+
+    res.json({
+        success: true,
+        count: tasks.length,
+        total,
+        page,
+        pages: Math.ceil(total / limit),
+        data: tasks,
+    });
 };
 
 const getTask = async (req, res) => {
