@@ -12,6 +12,8 @@ import InlineComposer from './InlineComposer.jsx';
 function ListColumn({
     list,
     tasks,
+    totalCount,
+    filtering,
     onRename,
     onDelete,
     onAddTask,
@@ -103,7 +105,9 @@ function ListColumn({
                     </h2>
                 )}
 
-                <span className="count">{tasks.length}</span>
+                <span className="count">
+                    {filtering ? `${tasks.length}/${totalCount}` : tasks.length}
+                </span>
 
                 <button
                     className="icon-btn"
@@ -118,15 +122,20 @@ function ListColumn({
                 items={tasks.map((task) => task._id)}
                 strategy={verticalListSortingStrategy}
             >
-                <div className="list-cards">
+                <div className={`list-cards${filtering ? ' is-filtering' : ''}`}>
                     {tasks.map((task) => (
                         <SortableTask
                             key={task._id}
                             task={task}
                             onOpen={onOpenTask}
                             onToggle={onToggleTask}
+                            disabled={filtering}
                         />
                     ))}
+
+                    {filtering && tasks.length === 0 && totalCount > 0 && (
+                        <p className="list-empty">No matching cards</p>
+                    )}
                 </div>
             </SortableContext>
 

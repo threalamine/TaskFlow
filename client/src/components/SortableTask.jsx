@@ -2,7 +2,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import TaskCard from './TaskCard.jsx';
 
-function SortableTask({ task, onOpen, onToggle }) {
+function SortableTask({ task, onOpen, onToggle, disabled = false }) {
     const {
         attributes,
         listeners,
@@ -10,7 +10,7 @@ function SortableTask({ task, onOpen, onToggle }) {
         transform,
         transition,
         isDragging,
-    } = useSortable({ id: task._id, data: { type: 'task' } });
+    } = useSortable({ id: task._id, data: { type: 'task' }, disabled });
 
     const style = {
         transform: CSS.Transform.toString(transform),

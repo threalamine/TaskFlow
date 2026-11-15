@@ -20,6 +20,7 @@ import ListColumn, { ListOverlay } from '../components/ListColumn.jsx';
 import TaskCard from '../components/TaskCard.jsx';
 import InlineComposer from '../components/InlineComposer.jsx';
 import TaskModal from '../components/TaskModal.jsx';
+import FilterBar from '../components/FilterBar.jsx';
 import { fetchProject } from '../api/projects';
 import { fetchLists, createList, updateList, deleteList } from '../api/lists';
 import {
@@ -29,6 +30,11 @@ import {
     deleteTask,
 } from '../api/tasks';
 import getErrorMessage from '../utils/getErrorMessage';
+import {
+    DEFAULT_FILTERS,
+    hasActiveFilters,
+    matchesFilters,
+} from '../utils/filters';
 import './Board.css';
 import './Dnd.css';
 
@@ -54,6 +60,8 @@ function Board() {
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState('');
     const [notice, setNotice] = useState('');
+
+    const [filters, setFilters] = useState(DEFAULT_FILTERS);
 
     const [activeTaskId, setActiveTaskId] = useState(null);
     const [listToDelete, setListToDelete] = useState(null);
@@ -307,6 +315,11 @@ function Board() {
         );
     }
 
+    const filtering = hasActiveFilters(filters);
+    const visibleTasks = filtering
+        ? tasks.filter((t) => matchesFilters(t, filters))
+        : tasks;
+
     const activeTask = tasks.find((t) => t._id === activeTaskId);
     const dragTask =
         activeDrag?.type === 'task'
@@ -337,6 +350,17 @@ function Board() {
                 {project.description && <p>{project.description}</p>}
             </div>
 
+            {(tasks.length > 0 || filtering) && (
+                <FilterBar
+                    filters={filters}
+                    onChange={setFilters}
+                    onClear={() => setFilters(DEFAULT_FILTERS)}
+                    active={filtering}
+                    shown={visibleTasks.length}
+                    total={tasks.length}
+                />
+            )}
+
             {notice && (
                 <div className="form-error board-notice">
                     <span>{notice}</span>
@@ -363,7 +387,9 @@ function Board() {
                             <ListColumn
                                 key={list._id}
                                 list={list}
-                                tasks={tasks.filter((t) => t.list === list._id)}
+                                tasks={visibleTasks.filter((t) => t.list === list._id)}
+                                totalCount={tasks.filter((t) => t.list === list._id).length}
+                                filtering={filtering}
                                 onRename={renameList}
                                 onDelete={(l) => {
                                     setDeleteListError('');
@@ -392,7 +418,7 @@ function Board() {
                     {dragList && (
                         <ListOverlay
                             list={dragList}
-                            tasks={tasks.filter((t) => t.list === dragList._id)}
+                            tasks={visibleTasks.filter((t) => t.list === dragList._id)}
                         />
                     )}
                 </DragOverlay>

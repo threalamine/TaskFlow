@@ -1,0 +1,104 @@
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 0 28px 16px;
+}
+
+.search-box {
+    position: relative;
+    flex: 0 1 260px;
+    min-width: 180px;
+}
+
+.search-box svg {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 9px 14px 9px 38px;
+    font: inherit;
+    font-size: 0.9rem;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid transparent;
+    border-radius: 999px;
+    color-scheme: dark;
+    transition: border-color var(--ease), box-shadow var(--ease);
+}
+
+.search-box input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.8;
+}
+
+.filter-select {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.filter-select select {
+    appearance: none;
+    padding: 8px 32px 8px 14px;
+    font: inherit;
+    font-size: 0.85rem;
+    color: var(--text);
+    background-color: var(--surface);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23778da9' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    color-scheme: dark;
+    cursor: pointer;
+    transition: border-color var(--ease), box-shadow var(--ease);
+}
+
+.filter-select select option {
+    background: var(--card);
+    color: var(--text);
+}
+
+[data-theme='light'] .search-box input,
+[data-theme='light'] .filter-select select {
+    color-scheme: light;
+}
+
+.search-box input:focus,
+.filter-select select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.filter-count {
+    color: var(--text);
+    font-size: 0.85rem;
+}
+
+.filter-hint {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.list-empty {
+    margin: 0;
+    padding: 6px 8px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.list-cards.is-filtering .card,
+.list-cards.is-filtering .card:active {
+    cursor: pointer;
+}
