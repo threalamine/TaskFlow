@@ -1,0 +1,71 @@
+.card {
+    cursor: grab;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.card:active {
+    cursor: grabbing;
+}
+
+.card-open {
+    cursor: inherit;
+}
+
+.sortable-item {
+    min-width: 0;
+}
+
+.sortable-item.is-dragging,
+.list.is-dragging {
+    opacity: 0.35;
+}
+
+.card.overlay,
+.card.overlay:hover {
+    transform: rotate(2.5deg);
+    box-shadow: var(--shadow-lift);
+    cursor: grabbing;
+}
+
+.list-overlay {
+    transform: rotate(1.5deg);
+    box-shadow: var(--shadow-lift);
+    cursor: grabbing;
+}
+
+.drag-handle {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 26px;
+    margin-left: -4px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: grab;
+    touch-action: none;
+    opacity: 0;
+    transition: opacity var(--ease), background var(--ease), color var(--ease);
+}
+
+.drag-handle:hover {
+    background: var(--chip);
+    color: var(--text);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.list:hover .drag-handle,
+.list:focus-within .drag-handle {
+    opacity: 1;
+}
+
+@media (hover: none) {
+    .drag-handle {
+        opacity: 1;
+    }
+}

@@ -3,6 +3,7 @@ import { ProtectedRoute, GuestRoute } from './components/RouteGuards.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import Projects from './pages/Projects.jsx';
+import Board from './pages/Board.jsx';
 import './App.css';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
 
       <Route element={<ProtectedRoute />}>
         <Route path="/projects" element={<Projects />} />
+        <Route path="/projects/:projectId" element={<Board />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/projects" replace />} />

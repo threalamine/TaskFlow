@@ -5,6 +5,11 @@ export const fetchProjects = async () => {
     return data.data;
 };
 
+export const fetchProject = async (id) => {
+    const { data } = await api.get(`/projects/${id}`);
+    return data.data;
+};
+
 export const createProject = async (payload) => {
     const { data } = await api.post('/projects', payload);
     return data.data;
