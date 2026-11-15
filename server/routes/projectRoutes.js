@@ -8,12 +8,14 @@ const {
 } = require('../controllers/projectController');
 const { protect } = require('../middleware/authMiddleware');
 const listRoutes = require('./listRoutes');
+const taskRoutes = require('./taskRoutes');
 
 const router = express.Router();
 
 router.use(protect);
 
 router.use('/:projectId/lists', listRoutes);
+router.use('/:projectId/tasks', taskRoutes);
 
 router.route('/').get(getProjects).post(createProject);
 router
